@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Deeckzer</string>
+    <string-array name="filtre_options">
+        <item>Titre</item>
+        <item>Artiste</item>
+        <item>Album</item>
+    </string-array>
+
 </resources>
