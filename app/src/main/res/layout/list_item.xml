@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="6dp"
+    >
     
     <ImageView
         android:id="@+id/cover"
@@ -10,6 +12,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:maxHeight="48dp"
+        android:minHeight="48dp"
+        android:maxWidth="48dp"
+        android:minWidth="48dp"
+        android:src="@mipmap/ic_launcher_round"
         />
 
     <TextView
@@ -17,7 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/cover"
+        app:layout_constraintBottom_toTopOf="@id/author"
         app:layout_constraintStart_toEndOf="@id/cover"
+        android:textSize="18sp"
+        android:text="Ghost Town"
+        android:layout_marginStart="4dp"
         />
 
 
@@ -27,6 +38,20 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/cover"
         app:layout_constraintStart_toEndOf="@id/cover"
+        android:textSize="12sp"
+        android:text="Isabel LaRosa"
+        android:layout_marginStart="4dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="15sp"
+        android:text="4:32"
+        android:layout_marginRight="16dp"
         />
 
 
