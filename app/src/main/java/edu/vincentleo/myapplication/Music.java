@@ -39,7 +39,7 @@ public class Music {
     }
 
     public Music setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
+        this.coverUrl = "http://edu.info06.net/lyrics/images/" + coverUrl;
         return this;
     }
 
