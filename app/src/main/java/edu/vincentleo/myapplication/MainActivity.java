@@ -2,15 +2,16 @@ package edu.vincentleo.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import com.squareup.picasso.Picasso;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -20,30 +21,36 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Music> musics;
+    private RecyclerView recyclerView;
+    private MusicAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Initialisation RecyclerView
+        recyclerView = findViewById(R.id.recycler_view);
         musics = getMusics();
 
-        
+        adapter = new MusicAdapter(musics);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     private ArrayList<Music> getMusics() {
         ArrayList<Music> musics = new ArrayList<>();
-
         Context context = this.getApplicationContext();
 
         try {
-            InputStream is = context.getAssets().open("../../../sampledata/lyrics.csv");
+            InputStream is = context.getAssets().open("lyrics.csv");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String ligne;
             boolean premiereLigne = true;
@@ -54,16 +61,19 @@ public class MainActivity extends AppCompatActivity {
                     continue;
                 }
 
-                String[] tokens = ligne.split(",");
+                String[] tokens = ligne.split("#");
                 if (tokens.length == 6) {
+                    int minutes = 3 + (int)(Math.random() * 2);
+                    int seconds = (int)(Math.random() * 60);
 
                     Music music = new Music()
                             .setTitle(tokens[0])
                             .setAlbum(tokens[1])
                             .setArtist(tokens[2])
                             .setDate(Integer.parseInt(tokens[3]))
-                            .setCover(Picasso.get().load("URL").get())
-                            .setLyrics(tokens[5].replace(';',  '\n'));
+                            .setCoverUrl(tokens[4])
+                            .setLyrics(tokens[5].replace(';', '\n'))
+                            .setDuration(minutes, seconds);
 
                     musics.add(music);
                 }

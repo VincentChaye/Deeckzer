@@ -1,13 +1,13 @@
 package edu.vincentleo.myapplication;
 
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 public class Music {
-    private String title, album, artist, lyrics;
-    private int date;
-    private Bitmap cover;
+    private String title;
+    private String album;
+    private String artist;
+    private String lyrics;
+    private String coverUrl;
     private String mp3;
+    private int date;
     private int minutes;
     private int seconds;
 
@@ -38,8 +38,8 @@ public class Music {
         return this;
     }
 
-    public Music setCover(Bitmap cover) {
-        this.cover = cover;
+    public Music setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
         return this;
     }
 
@@ -74,16 +74,12 @@ public class Music {
         return date;
     }
 
-    public Bitmap getCover() {
-        return cover;
+    public String getCoverUrl() {
+        return coverUrl;
     }
 
     public String getMp3() {
         return mp3;
-    }
-
-    public int[] getTime() {
-
     }
 
     public int getMinutes() {
@@ -92,5 +88,9 @@ public class Music {
 
     public int getSeconds() {
         return seconds;
+    }
+
+    public int[] getTime() {
+        return new int[]{minutes, seconds};
     }
 }
