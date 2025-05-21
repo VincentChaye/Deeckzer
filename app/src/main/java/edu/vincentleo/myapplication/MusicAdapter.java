@@ -1,5 +1,8 @@
 package edu.vincentleo.myapplication;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
+import java.net.URL;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
@@ -24,7 +26,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     @NonNull
     @Override
     public MusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
         return new MusicViewHolder(view);
     }
 
@@ -36,10 +39,22 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         holder.author.setText(music.getArtist());
         holder.time.setText(String.format("%d:%02d", music.getMinutes(), music.getSeconds()));
 
-        Picasso.get()
-                .load(music.getCoverUrl())
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.cover);
+        // Chargement natif de l'image depuis une URL
+        new Thread(() -> {
+            try {
+                String imageUrl = music.getCoverUrl();
+                URL url = new URL(imageUrl);
+                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                if (bitmap != null) {
+                    ((Activity) holder.itemView.getContext()).runOnUiThread(() -> {
+                        holder.cover.setImageBitmap(bitmap);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override

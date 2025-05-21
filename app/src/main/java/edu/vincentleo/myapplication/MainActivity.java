@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = context.getAssets().open("lyrics.csv");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String ligne;
-            reader.readLine();
+            reader.readLine(); // Ignorer l'en-tête
 
             while ((ligne = reader.readLine()) != null) {
                 String[] tokens = ligne.split("#");
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                             .setAlbum(tokens[1])
                             .setArtist(tokens[2])
                             .setDate(Integer.parseInt(tokens[3]))
-                            .setCoverUrl(tokens[4])
+                            .setCoverUrl( tokens[4]) // 🔁 Correction ici
                             .setLyrics(tokens[5].replace(';', '\n'))
                             .setMp3(tokens[6])
                             .setDuration(minutes, seconds);
@@ -83,4 +83,5 @@ public class MainActivity extends AppCompatActivity {
 
         return musics;
     }
+
 }
