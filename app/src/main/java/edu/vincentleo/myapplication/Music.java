@@ -1,6 +1,11 @@
 package edu.vincentleo.myapplication;
 
-public class Music {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Music implements Parcelable {
     private String title;
     private String album;
     private String artist;
@@ -12,6 +17,30 @@ public class Music {
     private int seconds;
 
     public Music() {}
+
+    public Music(Parcel in) {
+        title = in.readString();
+        album = in.readString();
+        artist = in.readString();
+        lyrics = in.readString();
+        coverUrl = in.readString();
+        mp3 = in.readString();
+        date = in.readInt();
+        minutes = in.readInt();
+        seconds = in.readInt();
+    }
+
+    public static final Creator<Music> CREATOR = new Creator<Music>() {
+        @Override
+        public Music createFromParcel(Parcel in) {
+            return new Music(in);
+        }
+
+        @Override
+        public Music[] newArray(int size) {
+            return new Music[size];
+        }
+    };
 
     public Music setTitle(String title) {
         this.title = title;
@@ -92,5 +121,23 @@ public class Music {
 
     public int[] getTime() {
         return new int[]{minutes, seconds};
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(album);
+        dest.writeString(artist);
+        dest.writeString(lyrics);
+        dest.writeString(coverUrl);
+        dest.writeString(mp3);
+        dest.writeInt(date);
+        dest.writeInt(minutes);
+        dest.writeInt(seconds);
     }
 }
