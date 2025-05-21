@@ -2,8 +2,7 @@ package edu.vincentleo.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.SearchView;
-import android.widget.Spinner;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,18 +52,14 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = context.getAssets().open("lyrics.csv");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String ligne;
-            boolean premiereLigne = true;
+            reader.readLine();
 
             while ((ligne = reader.readLine()) != null) {
-                if (premiereLigne) {
-                    premiereLigne = false;
-                    continue;
-                }
-
                 String[] tokens = ligne.split("#");
-                if (tokens.length == 6) {
-                    int minutes = 3 + (int)(Math.random() * 2);
-                    int seconds = (int)(Math.random() * 60);
+                if (tokens.length == 8) {
+                    String[] time = tokens[7].split("\\.");
+                    int minutes = Integer.parseInt(time[0]);
+                    int seconds = Integer.parseInt(time[1]);
 
                     Music music = new Music()
                             .setTitle(tokens[0])
@@ -73,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             .setDate(Integer.parseInt(tokens[3]))
                             .setCoverUrl(tokens[4])
                             .setLyrics(tokens[5].replace(';', '\n'))
+                            .setMp3(tokens[6])
                             .setDuration(minutes, seconds);
 
                     musics.add(music);
@@ -82,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             reader.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("getMusics", e.getMessage(), e.getCause());
         }
 
         return musics;
