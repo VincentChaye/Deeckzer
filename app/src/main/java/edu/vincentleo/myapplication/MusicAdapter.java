@@ -1,7 +1,8 @@
 package edu.vincentleo.myapplication;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-
+import java.net.URL;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
@@ -31,7 +26,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     @NonNull
     @Override
     public MusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
         return new MusicViewHolder(view);
     }
 
@@ -43,31 +39,22 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         holder.author.setText(music.getArtist());
         holder.time.setText(String.format("%d:%02d", music.getMinutes(), music.getSeconds()));
 
-        Glide.with(holder.cover.getContext())
-                .load(music.getCoverUrl())
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        Log.e("DEBUG", "Error loading image " + music.getCoverUrl(), e);
-                        return false; // false = laisse Glide afficher l'image d'erreur
-                    }
+        // Chargement natif de l'image depuis une URL
+        new Thread(() -> {
+            try {
+                String imageUrl = music.getCoverUrl();
+                URL url = new URL(imageUrl);
+                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-                    @Override
-                    public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                        Log.d("DEBUG", "Image loaded successfully");
-                        return false; // false = Glide continue à afficher l'image
-                    }
-                })
-                .into(holder.cover);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                if (bitmap != null) {
+                    ((Activity) holder.itemView.getContext()).runOnUiThread(() -> {
+                        holder.cover.setImageBitmap(bitmap);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }).start();
     }
 
     @Override
