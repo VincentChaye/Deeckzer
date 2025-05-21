@@ -28,6 +28,7 @@
         app:layout_constraintStart_toEndOf="@id/cover"
         android:textSize="18sp"
         android:text="Ghost Town"
+        android:textColor="#949494"
         android:layout_marginStart="4dp"
         />
 
