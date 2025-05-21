@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="50dp"
         android:src="@drawable/pause"
-        android:background=""
+        android:background="#00000000"
         />
 
     <ImageButton
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/pauseplay"
         app:layout_constraintBottom_toBottomOf="@id/pauseplay"
         android:src="@drawable/previous"
-        android:background=""
+        android:background="#00000000"
         />
 
     <ImageButton
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@id/pauseplay"
         app:layout_constraintBottom_toBottomOf="@id/pauseplay"
         android:src="@drawable/next"
-        android:background=""
+        android:background="#00000000"
         />
 
     <ProgressBar
@@ -86,17 +86,63 @@
         android:textColor="@color/white"
         />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Titre"
-        android:textColor="white"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
-        android:layout_marginBottom="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background=""
-        />
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Titre"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="#00000000"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/separator"
+            android:layout_margin="5dp"
+            />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auteur"
+            android:textSize="16sp"
+            android:textColor="#aaaaaa"
+            android:background="#00000000"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/separator"
+            android:layout_margin="5dp"
+            />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2025"
+            android:textSize="16sp"
+            android:textColor="#aaaaaa"
+            android:background="#00000000"
+            />
+
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/cover"
@@ -104,8 +150,9 @@
         android:layout_height="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintBottom_toTopOf="@id/title"
         android:layout_marginBottom="30dp"
         />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
