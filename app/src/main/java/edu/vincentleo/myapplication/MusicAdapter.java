@@ -13,14 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
 
-    private final List<Music> musicList;
+    private final List<Music> fullList;
+    private final List<Music> filteredList;
 
     public MusicAdapter(List<Music> musicList) {
-        this.musicList = musicList;
+        this.fullList = new ArrayList<>(musicList);
+        this.filteredList = new ArrayList<>(musicList);
     }
 
     @NonNull
@@ -33,13 +36,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MusicViewHolder holder, int position) {
-        Music music = musicList.get(position);
+        Music music = filteredList.get(position);
 
         holder.title.setText(music.getTitle());
         holder.author.setText(music.getArtist());
         holder.time.setText(String.format("%d:%02d", music.getMinutes(), music.getSeconds()));
 
-        // Chargement natif de l'image depuis une URL
+        // Chargement natif de l'image en thread secondaire
         new Thread(() -> {
             try {
                 String imageUrl = music.getCoverUrl();
@@ -59,7 +62,22 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     @Override
     public int getItemCount() {
-        return musicList.size();
+        return filteredList.size();
+    }
+
+    public void filter(String query) {
+        filteredList.clear();
+        if (query == null || query.trim().isEmpty()) {
+            filteredList.addAll(fullList);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            for (Music music : fullList) {
+                if (music.getTitle().toLowerCase().startsWith(lowerQuery)) {
+                    filteredList.add(music);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     static class MusicViewHolder extends RecyclerView.ViewHolder {
