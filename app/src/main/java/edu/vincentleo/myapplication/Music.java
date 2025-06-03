@@ -80,7 +80,7 @@ public class Music implements Parcelable {
     }
 
     public Music setMp3(String mp3) {
-        this.mp3 = mp3;
+        this.mp3 = "http://edu.info06.net/lyrics/mp3/" + mp3;
         return this;
     }
 
