@@ -58,7 +58,15 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                 e.printStackTrace();
             }
         }).start();
+
+        // Lancement du lecteur quand on clique sur une musique
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(holder.itemView.getContext(), MusicPlayerActivity.class);
+            intent.putExtra("music", music);
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
+
 
     @Override
     public int getItemCount() {
