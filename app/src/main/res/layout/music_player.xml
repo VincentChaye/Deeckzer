@@ -58,7 +58,6 @@
         android:layout_height="5dp"
         app:layout_constraintStart_toStartOf="@id/progressBar"
         app:layout_constraintBottom_toTopOf="@id/pauseplay"
-        android:layout_marginBottom="30dp"
         android:background="@color/white"
         />
 
@@ -153,6 +152,15 @@
         app:layout_constraintBottom_toTopOf="@id/info"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="30dp"
+        />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="12dp"
+        android:src="@drawable/lyrics"
         />
 
 
