@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.time.Instant;
+import java.util.Date;
+
 public class Music implements Parcelable {
     private String title;
     private String album;
@@ -16,7 +19,11 @@ public class Music implements Parcelable {
     private int minutes;
     private int seconds;
 
-    public Music() {}
+    public Music() {
+        lyrics = "";
+        coverUrl = ""; //TODO trouver image de couverture par defaut :)
+        date = Date.from(Instant.now()).getYear();
+    }
 
     public Music(Parcel in) {
         title = in.readString();
@@ -73,7 +80,7 @@ public class Music implements Parcelable {
     }
 
     public Music setMp3(String mp3) {
-        this.mp3 = mp3;
+        this.mp3 = "http://edu.info06.net/lyrics/mp3/" + mp3;
         return this;
     }
 

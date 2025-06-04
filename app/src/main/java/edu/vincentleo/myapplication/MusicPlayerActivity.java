@@ -23,7 +23,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
-    private boolean isPlaying = true;
+    private boolean isPlaying = false;
 
     private ImageButton playPauseButton;
     private ProgressBar fullProgressBar;
@@ -48,7 +48,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 params.width = (int) (ratio * maxWidth);
                 currentProgressBar.setLayoutParams(params);
             }
-
             handler.postDelayed(this, 500);
         }
     };
@@ -58,75 +57,74 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_player);
 
-        // Récupération de la musique passée par l'intent
         Music music = getIntent().getParcelableExtra("music");
 
         if (music == null) {
-            Log.e("DEBUG", ">>> music == null !");
             Toast.makeText(this, "Erreur : musique introuvable", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
-        Log.d("DEBUG", ">>> MusicPlayerActivity lancée");
-        Log.d("MUSIC_URL", "URL MP3: " + music.getMp3());
+        Log.d("DEBUG", "Lecture de : " + music.getTitle());
+        Log.d("MUSIC_URL", "MP3 URL = " + music.getMp3());
 
-        // Bind des vues
+        // Vues
         TextView titleView = findViewById(R.id.title);
         TextView authorView = findViewById(R.id.author);
         TextView dateView = findViewById(R.id.date);
         ImageView coverView = findViewById(R.id.cover);
-
         playPauseButton = findViewById(R.id.pauseplay);
         fullProgressBar = findViewById(R.id.progressBar);
         currentProgressBar = findViewById(R.id.currentProgress);
         currentTimeView = findViewById(R.id.currentTime);
         maxTimeView = findViewById(R.id.maxTime);
 
-        // Affichage des infos
+        // Infos
         titleView.setText(music.getTitle());
         authorView.setText(music.getArtist());
         dateView.setText(String.valueOf(music.getDate()));
 
-        // Chargement de l’image (en thread secondaire)
+        // Image de couverture
         new Thread(() -> {
             try {
                 URL url = new URL(music.getCoverUrl());
                 Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
                 if (bitmap != null) {
                     runOnUiThread(() -> coverView.setImageBitmap(bitmap));
                 }
             } catch (Exception e) {
-                Log.e("DEBUG", "Erreur chargement image : " + e.getMessage());
+                Log.e("DEBUG", "Erreur image : " + e.getMessage());
                 e.printStackTrace();
             }
         }).start();
 
-        // Initialisation MediaPlayer
+        // Lecture audio
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(music.getMp3());
             mediaPlayer.prepareAsync();
+
             mediaPlayer.setOnPreparedListener(mp -> {
                 mp.start();
                 isPlaying = true;
+                playPauseButton.setImageResource(R.drawable.pause);
                 maxTimeView.setText(formatTime(mp.getDuration()));
                 handler.post(updateProgress);
             });
+
+            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                Toast.makeText(this, "Erreur de lecture", Toast.LENGTH_LONG).show();
+                Log.e("MediaPlayer", "Erreur de lecture : " + what + " / " + extra);
+                return true;
+            });
+
         } catch (IOException e) {
-            Toast.makeText(this, "Erreur de lecture audio", Toast.LENGTH_SHORT).show();
-            Log.e("MediaPlayer", "IOException: " + e.getMessage());
+            Toast.makeText(this, "Fichier audio introuvable", Toast.LENGTH_LONG).show();
+            Log.e("MediaPlayer", "IOException : " + e.getMessage());
             e.printStackTrace();
         }
 
-        // En cas d'erreur de lecture
-        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
-            Log.e("MediaPlayer", "Erreur pendant la lecture : what=" + what + ", extra=" + extra);
-            return true;
-        });
-
-        // Bouton Play/Pause
+        // Bouton play/pause
         playPauseButton.setOnClickListener(v -> {
             if (mediaPlayer != null) {
                 if (isPlaying) {

@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/pauseplay"
-        android:layout_marginBottom="30dp"
+        android:padding="30dp"
         android:background="#aaaaaa"
         />
 
@@ -58,7 +58,6 @@
         android:layout_height="5dp"
         app:layout_constraintStart_toStartOf="@id/progressBar"
         app:layout_constraintBottom_toTopOf="@id/pauseplay"
-        android:layout_marginBottom="30dp"
         android:background="@color/white"
         />
 
@@ -150,9 +149,32 @@
         android:layout_height="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/info"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="30dp"
         />
 
+    <ImageButton
+        android:id="@+id/lyrics"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="12dp"
+        android:src="@drawable/lyrics"
+        />
+
+    <LinearLayout
+        android:id="@+id/lyricsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <TextView
+            android:id="@+id/lyricsText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
