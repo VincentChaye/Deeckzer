@@ -3,6 +3,7 @@ package edu.vincentleo.myapplication;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
 
@@ -63,6 +65,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         holder.itemView.setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(holder.itemView.getContext(), MusicPlayerActivity.class);
             intent.putExtra("music", music);
+            Musics.getInstance().addToQueue(music);
             holder.itemView.getContext().startActivity(intent);
         });
     }

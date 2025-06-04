@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Music> musics;
+    private Musics musics;
     private RecyclerView recyclerView;
     private MusicAdapter adapter;
     private SearchView searchView; // 🔍 Barre de recherche
@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);  // Récupère le RecyclerView
 
         // Chargement des musiques depuis le CSV
-        musics = getMusics();
+        musics = Musics.getInstance();
 
         // Configuration de l'adapter et du layout
-        adapter = new MusicAdapter(musics);
+        adapter = new MusicAdapter(musics.getMusics());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -75,46 +75,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    // Lecture des données depuis le fichier lyrics.csv dans assets/
-    private ArrayList<Music> getMusics() {
-        ArrayList<Music> musics = new ArrayList<>();
-        Context context = this.getApplicationContext();
-
-        try {
-            InputStream is = context.getAssets().open("lyrics.csv");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String ligne;
-            reader.readLine(); // Ignorer l'en-tête
-
-            while ((ligne = reader.readLine()) != null) {
-                String[] tokens = ligne.split("#");
-                if (tokens.length == 8) {
-                    String[] time = tokens[7].split("\\.");
-                    int minutes = Integer.parseInt(time[0]);
-                    int seconds = Integer.parseInt(time[1]);
-
-                    Music music = new Music()
-                            .setTitle(tokens[0])
-                            .setAlbum(tokens[1])
-                            .setArtist(tokens[2])
-                            .setDate(Integer.parseInt(tokens[3]))
-                            .setCoverUrl(tokens[4])
-                            .setLyrics(tokens[5].replace(';', '\n'))
-                            .setMp3(tokens[6])
-                            .setDuration(minutes, seconds);
-
-                    musics.add(music);
-                }
-            }
-
-            reader.close();
-
-        } catch (Exception e) {
-            Log.e("getMusics", e.getMessage(), e.getCause());
-        }
-
-        return musics;
     }
 }

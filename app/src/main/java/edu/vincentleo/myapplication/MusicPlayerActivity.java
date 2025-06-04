@@ -1,11 +1,13 @@
 package edu.vincentleo.myapplication;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,18 +20,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
+import java.util.Random;
 
 public class MusicPlayerActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
     private boolean isPlaying = false;
-
     private ImageButton playPauseButton;
     private ProgressBar fullProgressBar;
     private ProgressBar currentProgressBar;
     private TextView currentTimeView;
     private TextView maxTimeView;
+
+    private MediaPlayer mediaPlayer;
+
+    private Music music;
 
     private final Runnable updateProgress = new Runnable() {
         @Override
@@ -57,7 +62,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_player);
 
-        Music music = getIntent().getParcelableExtra("music");
+        music = getIntent().getParcelableExtra("music");
 
         if (music == null) {
             Toast.makeText(this, "Erreur : musique introuvable", Toast.LENGTH_LONG).show();
@@ -69,10 +74,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         Log.d("MUSIC_URL", "MP3 URL = " + music.getMp3());
 
         // Vues
-        TextView titleView = findViewById(R.id.title);
-        TextView authorView = findViewById(R.id.author);
-        TextView dateView = findViewById(R.id.date);
-        ImageView coverView = findViewById(R.id.cover);
         playPauseButton = findViewById(R.id.pauseplay);
         fullProgressBar = findViewById(R.id.progressBar);
         currentProgressBar = findViewById(R.id.currentProgress);
@@ -80,6 +81,54 @@ public class MusicPlayerActivity extends AppCompatActivity {
         maxTimeView = findViewById(R.id.maxTime);
 
         // Infos
+        displayMusic();
+
+        // Lecture audio
+        mediaPlayer = playMusic();
+
+        // Bouton play/pause
+        playPauseButton.setOnClickListener(v -> {
+            if (mediaPlayer != null) {
+                togglePlay();
+            }
+        });
+
+        ImageButton previousButton = findViewById(R.id.previous);
+        ImageButton nextButton = findViewById(R.id.next);
+
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((float) (mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration()) > .01) {
+                    mediaPlayer.start();
+                    mediaPlayer.start(); // recommence la musique si elle est à moins de 1% de sa durée totale
+                }
+                else {
+                    if (isPlaying) togglePlay();
+                    music = Musics.getInstance().getPreviousMusic();
+                    displayMusic();
+                    playMusic();
+                }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPlaying) togglePlay();
+                music = Musics.getInstance().getNextMusic();
+                displayMusic();
+                playMusic();
+            }
+        });
+    }
+
+    private void displayMusic() {
+        TextView titleView = findViewById(R.id.title);
+        TextView authorView = findViewById(R.id.author);
+        TextView dateView = findViewById(R.id.date);
+        ImageView coverView = findViewById(R.id.cover);
+
         titleView.setText(music.getTitle());
         authorView.setText(music.getArtist());
         dateView.setText(String.valueOf(music.getDate()));
@@ -97,8 +146,20 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
 
-        // Lecture audio
+    private void togglePlay() {
+        isPlaying = !isPlaying;
+        if (!isPlaying) {
+            mediaPlayer.pause();
+            playPauseButton.setImageResource(R.drawable.play);
+        } else {
+            mediaPlayer.start();
+            playPauseButton.setImageResource(R.drawable.pause);
+        }
+    }
+
+    private MediaPlayer playMusic() {
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(music.getMp3());
@@ -124,19 +185,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Bouton play/pause
-        playPauseButton.setOnClickListener(v -> {
-            if (mediaPlayer != null) {
-                if (isPlaying) {
-                    mediaPlayer.pause();
-                    playPauseButton.setImageResource(R.drawable.play);
-                } else {
-                    mediaPlayer.start();
-                    playPauseButton.setImageResource(R.drawable.pause);
-                }
-                isPlaying = !isPlaying;
-            }
-        });
+        return mediaPlayer;
     }
 
     private String formatTime(int millis) {
