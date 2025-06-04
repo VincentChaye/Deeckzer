@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +81,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         currentTimeView = findViewById(R.id.currentTime);
         maxTimeView = findViewById(R.id.maxTime);
 
+        findViewById(R.id.lyricsLayout).setActivated(false);
+        findViewById(R.id.cover).setActivated(true);
+
         // Infos
         displayMusic();
 
@@ -121,6 +125,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 playMusic();
             }
         });
+
+        ImageButton lyricsButton = findViewById(R.id.lyrics);
+        lyricsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleLyrics();
+            }
+        });
     }
 
     private void displayMusic() {
@@ -128,10 +140,12 @@ public class MusicPlayerActivity extends AppCompatActivity {
         TextView authorView = findViewById(R.id.author);
         TextView dateView = findViewById(R.id.date);
         ImageView coverView = findViewById(R.id.cover);
+        TextView lyricsView = findViewById(R.id.lyricsText);
 
         titleView.setText(music.getTitle());
         authorView.setText(music.getArtist());
         dateView.setText(String.valueOf(music.getDate()));
+        lyricsView.setText(music.getLyrics());
 
         // Image de couverture
         new Thread(() -> {
@@ -186,6 +200,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
 
         return mediaPlayer;
+    }
+
+    private void toggleLyrics() {
+        LinearLayout layout = findViewById(R.id.lyricsLayout);
+        ImageView cover = findViewById(R.id.cover);
+
+        layout.setActivated(!layout.isActivated());
+        cover.setActivated(!cover.isActivated());
     }
 
     private String formatTime(int millis) {
