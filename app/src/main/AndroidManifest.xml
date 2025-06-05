@@ -19,6 +19,7 @@
 
         <!-- Activité de lecture musicale ajoutée -->
         <activity android:name=".MusicPlayerActivity" />
+        <service android:name=".MusicService" />
 
         <activity
             android:name=".MainActivity"
