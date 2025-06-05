@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public class Musics {
         current = 0;
 
         try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("assets/lyrics.csv");
+            InputStream is = new URL("http://edu.info06.net/lyrics/lyrics.csv").openStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String ligne;
             reader.readLine(); // Ignorer l'en-tête
