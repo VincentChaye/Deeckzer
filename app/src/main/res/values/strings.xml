@@ -5,5 +5,5 @@
         <item>Artiste</item>
         <item>Album</item>
     </string-array>
-
+    <string name="back_button_desc">Retour</string>
 </resources>

@@ -19,10 +19,23 @@ public class Music implements Parcelable {
     private int minutes;
     private int seconds;
 
+    private String matchSource = ""; // "Titre", "Auteur", "Paroles"
+
+    public void setMatchSource(String source) {
+        this.matchSource = source;
+    }
+
+    public String getMatchSource() {
+        return matchSource;
+    }
+
+
+
     public Music() {
         lyrics = "";
         coverUrl = "";
         date = Date.from(Instant.now()).getYear();
+
     }
 
     public Music(Parcel in) {
@@ -36,6 +49,7 @@ public class Music implements Parcelable {
         minutes = in.readInt();
         seconds = in.readInt();
         //
+
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
@@ -153,3 +167,5 @@ public class Music implements Parcelable {
         dest.writeInt(seconds);
     }
 }
+
+

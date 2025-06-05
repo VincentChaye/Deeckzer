@@ -61,13 +61,40 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             }
         }).start();
 
-        // Lancement du lecteur quand on clique sur une musique
+        String source = music.getMatchSource();
+
+        if (source != null && !source.isEmpty()) {
+            holder.matchSource.setVisibility(View.VISIBLE);
+            holder.matchSource.setText(source);
+
+            // 🎨 Couleurs personnalisées selon la provenance
+            switch (source) {
+                case "Titre":
+                    holder.matchSource.setTextColor(0xFF4CAF50); // vert
+                    break;
+                case "Auteur":
+                    holder.matchSource.setTextColor(0xFF2196F3); // bleu
+                    break;
+                case "Paroles":
+                    holder.matchSource.setTextColor(0xFFF44336); // rouge
+                    break;
+                default:
+                    holder.matchSource.setTextColor(0xFF888888); // gris par défaut
+            }
+
+        } else {
+            holder.matchSource.setVisibility(View.GONE);
+        }
+
         holder.itemView.setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(holder.itemView.getContext(), MusicPlayerActivity.class);
             intent.putExtra("music", music);
             Musics.getInstance().addToQueue(music);
             holder.itemView.getContext().startActivity(intent);
         });
+
+
+
     }
 
 
@@ -79,21 +106,44 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     public void filter(String query) {
         filteredList.clear();
         if (query == null || query.trim().isEmpty()) {
+            for (Music music : fullList) {
+                music.setMatchSource("");
+            }
             filteredList.addAll(fullList);
         } else {
             String lowerQuery = query.toLowerCase();
+            List<Music> matchedTitles = new ArrayList<>();
+            List<Music> matchedArtists = new ArrayList<>();
+            List<Music> matchedLyrics = new ArrayList<>();
+
             for (Music music : fullList) {
-                if (music.getTitle().toLowerCase().startsWith(lowerQuery)) {
-                    filteredList.add(music);
+                if (music.getTitle().toLowerCase().contains(lowerQuery)) {
+                    music.setMatchSource("Titre");
+                    matchedTitles.add(music);
+                } else if (music.getArtist().toLowerCase().contains(lowerQuery)) {
+                    music.setMatchSource("Auteur");
+                    matchedArtists.add(music);
+                } else if (music.getLyrics().toLowerCase().contains(lowerQuery)) {
+                    music.setMatchSource("Paroles");
+                    matchedLyrics.add(music);
+                } else {
+                    music.setMatchSource("");
                 }
             }
+
+            filteredList.addAll(matchedTitles);
+            filteredList.addAll(matchedArtists);
+            filteredList.addAll(matchedLyrics);
         }
         notifyDataSetChanged();
     }
 
+
+
+
     static class MusicViewHolder extends RecyclerView.ViewHolder {
         ImageView cover;
-        TextView title, author, time;
+        TextView title, author, time, matchSource;
 
         public MusicViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,6 +151,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             title = itemView.findViewById(R.id.title);
             author = itemView.findViewById(R.id.author);
             time = itemView.findViewById(R.id.time);
+            matchSource = itemView.findViewById(R.id.matchSource);
+
         }
     }
 }

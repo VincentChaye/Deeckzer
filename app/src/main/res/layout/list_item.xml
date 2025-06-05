@@ -45,6 +45,21 @@
         android:layout_marginStart="4dp"
         />
 
+
+    <TextView
+        android:id="@+id/matchSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Titre"
+        android:textColor="#888888"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="60dp"/>
+
+
+
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"

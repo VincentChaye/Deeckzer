@@ -17,6 +17,10 @@
         android:background="#00000000"
         />
 
+
+
+
+
     <ImageButton
         android:id="@+id/previous"
         android:layout_width="wrap_content"
@@ -182,5 +186,19 @@
             android:scrollbars="vertical"
             />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/back_button_desc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="25dp"
+        app:tint="@android:color/white" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,6 +38,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     private Music music;
 
+
+
     private final Runnable updateProgress = new Runnable() {
         @Override
         public void run() {
@@ -59,10 +61,17 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
     };
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_player);
+
+        ImageView backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> finish());
 
         music = getIntent().getParcelableExtra("music");
 
