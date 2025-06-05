@@ -35,6 +35,7 @@ public class Music implements Parcelable {
         date = in.readInt();
         minutes = in.readInt();
         seconds = in.readInt();
+        //
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {

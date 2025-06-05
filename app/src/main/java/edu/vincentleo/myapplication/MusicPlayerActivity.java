@@ -231,7 +231,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         int minutes = millis / 1000 / 60;
         int seconds = (millis / 1000) % 60;
         return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
-    }
+    }//
 
     @Override
     protected void onDestroy() {
