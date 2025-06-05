@@ -21,7 +21,7 @@ public class Music implements Parcelable {
 
     public Music() {
         lyrics = "";
-        coverUrl = ""; //TODO trouver image de couverture par defaut :)
+        coverUrl = "";
         date = Date.from(Instant.now()).getYear();
     }
 
@@ -65,6 +65,10 @@ public class Music implements Parcelable {
     }
 
     public Music setLyrics(String lyrics) {
+        if(lyrics.charAt(0) == '\"')
+            lyrics = lyrics.substring(1);
+        if(lyrics.charAt(lyrics.length()-1) == '\"')
+            lyrics = lyrics.substring(0, lyrics.length()-1);
         this.lyrics = lyrics;
         return this;
     }

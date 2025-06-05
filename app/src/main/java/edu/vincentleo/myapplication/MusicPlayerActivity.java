@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -81,8 +82,16 @@ public class MusicPlayerActivity extends AppCompatActivity {
         currentTimeView = findViewById(R.id.currentTime);
         maxTimeView = findViewById(R.id.maxTime);
 
-        findViewById(R.id.lyricsLayout).setActivated(false);
-        findViewById(R.id.cover).setActivated(true);
+        LinearLayout lyricsLayout = findViewById(R.id.lyricsLayout);
+        lyricsLayout.setActivated(false);
+        lyricsLayout.setVisibility(View.INVISIBLE);
+
+        ImageView cover = findViewById(R.id.cover);
+        cover.setActivated(true);
+        cover.setVisibility(View.VISIBLE);
+
+        TextView lyricsText = findViewById(R.id.lyricsText);
+        lyricsText.setMovementMethod(new ScrollingMovementMethod());
 
         // Infos
         displayMusic();
@@ -208,6 +217,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         layout.setActivated(!layout.isActivated());
         cover.setActivated(!cover.isActivated());
+        if(layout.isActivated())
+            layout.setVisibility(View.VISIBLE);
+        else
+            layout.setVisibility(View.INVISIBLE);
+        if(cover.isActivated())
+            cover.setVisibility(View.VISIBLE);
+        else
+            cover.setVisibility(View.INVISIBLE);
     }
 
     private String formatTime(int millis) {

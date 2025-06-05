@@ -169,11 +169,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/info"
+        android:layout_margin="30dp"
         >
         <TextView
             android:id="@+id/lyricsText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="450dp"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:scrollbars="vertical"
             />
     </LinearLayout>
 
