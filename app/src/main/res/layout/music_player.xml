@@ -164,6 +164,7 @@
         android:src="@drawable/lyrics"
         />
 
+
     <LinearLayout
         android:id="@+id/lyricsLayout"
         android:layout_width="match_parent"
